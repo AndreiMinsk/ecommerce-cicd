@@ -5,3 +5,12 @@ spring:
     url: jdbc:postgresql://product-db:5432/postgres
     password: password
     username: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+  application:
+    name: product-service
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka:8761/eureka/

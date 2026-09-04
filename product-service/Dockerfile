@@ -3,6 +3,7 @@ WORKDIR /app
 COPY pom.xml .
 COPY product-service/pom.xml product-service/
 COPY order-service/pom.xml order-service/
+COPY eureka-server/pom.xml eureka-server/
 RUN mvn dependency:go-offline -B
 COPY . .
 RUN mvn clean package -DskipTests -pl product-service -am

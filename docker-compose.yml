@@ -7,6 +7,7 @@ services:
       - "8080:8080"
     depends_on:
       - product-db
+      - eureka
   order-service:
     build:
       context: .
@@ -15,6 +16,7 @@ services:
       - "8081:8081"
     depends_on:
       - order-db
+      - eureka
   product-db:
     image: postgres
     environment:
@@ -31,6 +33,13 @@ services:
       - "5433:5432"
     volumes:
       - order_data:/var/lib/postgresql
+  eureka:
+    build:
+      context: .
+      dockerfile: ./eureka-server/Dockerfile
+    ports:
+      - "8761:8761"
+
 volumes:
   product_data:
   order_data:

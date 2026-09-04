@@ -2,6 +2,15 @@ server:
   port: 8081
 spring:
   datasource:
-    url: jdbc:postgresql://order-db:5433/postgres
+    url: jdbc:postgresql://order-db:5432/postgres
     password: password
     username: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+  application:
+    name: order-service
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka:8761/eureka/
