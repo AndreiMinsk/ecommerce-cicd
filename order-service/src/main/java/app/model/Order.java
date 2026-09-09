@@ -1,10 +1,7 @@
 package app.model;
 //- Хранит: `id`, `productId`, `quantity`, `status`.
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -24,6 +21,7 @@ public class Order {
 
     private Integer quantity;
 
+    @Enumerated(EnumType.STRING)
     private Status status;
 
 
