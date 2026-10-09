@@ -87,4 +87,17 @@ public class OrderServiceTest {
 
 
     }
+
+    @Test
+    public void createOrder_if_product_is_null_should_throw_exception () {
+        when(productClient.getProduct(anyLong())).thenReturn(null);
+        OrderDto orderDto = new OrderDto(1L, 1);
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () ->
+                orderService.createOrder(orderDto));
+
+        assertEquals("There is no product!!!", exception.getMessage());
+        verify(orderRepository, never()).save(any(Order.class));
+        verify(kafkaTemplate, never()).send(any(String.class), any(Order.class));
+    }
 }

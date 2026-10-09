@@ -32,13 +32,13 @@ public class OrderService {
 
     private void checkAvailability(OrderDto dto) {
         ProductDto product = productClient.getProduct(dto.productId());
-        System.out.println(product.id() + " " + product.name());
-        if (product == null) {
-            throw new RuntimeException("There is no product!!!");
-        } else {
+        if (product != null) {
             if (dto.quantity() > product.stock()) {
                 throw new RuntimeException("There is not enough product in stock");
             }
+        } else {
+            throw new RuntimeException("There is no product!!!");
+
         }
     }
 }
