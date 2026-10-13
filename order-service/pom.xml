@@ -168,7 +168,7 @@
                                     </limit>
                                     <limit>
                                         <counter>BRANCH</counter>
-                                        <value>COVEREDRATION</value>
+                                        <value>COVEREDRATIO</value>
                                         <minimum>0.70</minimum>
                                     </limit>
                                 </limits>
