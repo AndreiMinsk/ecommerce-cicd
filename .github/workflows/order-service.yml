@@ -1,0 +1,20 @@
+name: Order Service CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'order-service/**'
+      - '.github/workflows/order-service.yml'
+      - '.github/workflows/_build-and-deploy.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'order-service/**'
+jobs:
+  ci:
+    uses: ./.github/workflows/_build-and-deploy.yml
+    with:
+      service: order-service
+    secrets: inherit
