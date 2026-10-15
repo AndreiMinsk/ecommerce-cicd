@@ -27,8 +27,7 @@ jobs:
           cache: maven
 
       - run: mvn -B clean verify
-        with:
-          working-directory: ${{inputs.service}}
+        working-directory: ${{inputs.service}}
 
       - uses: actions/upload-artifact@v4
         if: always()
