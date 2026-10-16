@@ -53,6 +53,21 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      - name: Notify on failure
+        if: failure()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.SMTP_HOST }}
+          server_port: 465
+          username: ${{ secrets.SMTP_USER }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: "❌ CI failed: ${{ inputs.service }}"
+          to: ${{ secrets.SMTP_TO }}
+          from: GitHub Actions
+          body: |
+            Workflow failed for ${{ inputs.service }}
+            Commit: ${{ github.sha }}
+            See: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
 
 

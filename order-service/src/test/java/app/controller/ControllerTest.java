@@ -31,7 +31,7 @@ public class ControllerTest {
                 """;
         mockMvc.perform(post("/orders/").content(reqBody).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").value("Your order was created!!!"));
+                .andExpect(jsonPath("$").value("ZZZZYour order was created!!!"));
 
 
 
