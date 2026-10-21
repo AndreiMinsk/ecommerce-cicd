@@ -2,7 +2,7 @@ server:
   port: 8081
 spring:
   datasource:
-    url: jdbc:postgresql://order-db:5432/postgres
+    url: ${DB_URL:jdbc:postgresql://order-db:5432/postgres}
     password: password
     username: postgres
   jpa:
@@ -19,4 +19,4 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://eureka:8761/eureka/
+      defaultZone: ${EUREKA_URL:http://eureka:8761/eureka/}
