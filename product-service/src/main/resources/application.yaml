@@ -11,6 +11,8 @@ spring:
   application:
     name: product-service
 eureka:
+  instance:
+    prefer-ip-address: true
   client:
     service-url:
       defaultZone: ${EUREKA_URL:http://eureka:8761/eureka/}
