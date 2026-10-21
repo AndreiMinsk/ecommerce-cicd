@@ -95,6 +95,8 @@ spec:
               value: jdbc:postgresql://order-db:5432/postgres
             - name: EUREKA_URL
               value: http://eureka-server:8761/eureka/
+            - name: BOOTSTRAP_SERVERS
+              value: kafka:9092
 ---
 apiVersion: apps/v1
 kind: Deployment
