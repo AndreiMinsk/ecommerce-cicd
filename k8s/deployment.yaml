@@ -36,6 +36,18 @@ spec:
       containers:
         - name: product-service
           image: andreimensk/product-service
+          livenessProbe:
+            httpGet:
+              port: 8080
+              path: /actuator/health/liveness
+            initialDelaySeconds: 200
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: /actuator/health/readiness
+            initialDelaySeconds: 10
+            periodSeconds: 5
           ports:
             - containerPort: 8080
           envFrom:
@@ -63,6 +75,18 @@ spec:
           image: postgres
           ports:
             - containerPort: 5432
+          livenessProbe:
+            exec:
+              command: ["pg_isready", "-U", "postgres"]
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 6
+          readinessProbe:
+            exec:
+              command:
+                - pg_isready
+                - "-U"
+                - postgres
           env:
             - name: POSTGRES_DB
               value: postgres
@@ -91,6 +115,18 @@ spec:
       containers:
         - name: order-service
           image: andreimensk/order-service
+          livenessProbe:
+            httpGet:
+              port: 8081
+              path: /actuator/health/liveness
+            initialDelaySeconds: 200
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              port: 8081
+              path: /actuator/health/readiness
+            initialDelaySeconds: 10
+            periodSeconds: 5
           ports:
             - containerPort: 8081
           envFrom:
@@ -118,6 +154,18 @@ spec:
           image: postgres
           ports:
             - containerPort: 5432
+          livenessProbe:
+            exec:
+              command: [ "pg_isready", "-U", "postgres" ]
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 6
+          readinessProbe:
+            exec:
+              command:
+                - pg_isready
+                - "-U"
+                - postgres
           env:
             - name: POSTGRES_PASSWORD
               valueFrom:
@@ -147,6 +195,17 @@ spec:
           image: confluentinc/cp-kafka:7.4.0
           ports:
             - containerPort: 9092
+          livenessProbe:
+            tcpSocket:
+              port: 9092
+            initialDelaySeconds: 60
+            periodSeconds: 20
+            failureThreshold: 6
+          readinessProbe:
+            tcpSocket:
+              port: 9092
+            initialDelaySeconds: 30
+            periodSeconds: 10
           env:
             - name: KAFKA_BROKER_ID
               value: '1'
