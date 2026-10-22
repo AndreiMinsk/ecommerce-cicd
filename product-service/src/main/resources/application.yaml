@@ -3,8 +3,8 @@ server:
 spring:
   datasource:
     url: ${DB_URL:jdbc:postgresql://product-db:5432/postgres}
-    password: password
-    username: postgres
+    password: ${DB_PASSWORD:password}
+    username: ${DB_USERNAME:postgres}
   jpa:
     hibernate:
       ddl-auto: update

@@ -41,6 +41,8 @@ spec:
           envFrom:
             - configMapRef:
                 name: product-service-config
+            - secretRef:
+                name: product-db-secret
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -62,10 +64,13 @@ spec:
           ports:
             - containerPort: 5432
           env:
-            - name: POSTGRES_PASSWORD
-              value: password
             - name: POSTGRES_DB
               value: postgres
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: order-db-secret
+                  key: POSTGRES_PASSWORD
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -91,6 +96,8 @@ spec:
           envFrom:
             - configMapRef:
                 name: order-service-config
+            - secretRef:
+                name: order-db-secret
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -113,7 +120,10 @@ spec:
             - containerPort: 5432
           env:
             - name: POSTGRES_PASSWORD
-              value: password
+              valueFrom:
+                secretKeyRef:
+                  name: order-db-secret
+                  key: POSTGRES_PASSWORD
             - name: POSTGRES_DB
               value: postgres
 ---
