@@ -38,11 +38,9 @@ spec:
           image: andreimensk/product-service
           ports:
             - containerPort: 8080
-          env:
-            - name: DB_URL
-              value: jdbc:postgresql://product-db:5432/postgres
-            - name: EUREKA_URL
-              value: http://eureka-server:8761/eureka/
+          envFrom:
+            - configMapRef:
+                name: product-service-config
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -90,13 +88,9 @@ spec:
           image: andreimensk/order-service
           ports:
             - containerPort: 8081
-          env:
-            - name: DB_URL
-              value: jdbc:postgresql://order-db:5432/postgres
-            - name: EUREKA_URL
-              value: http://eureka-server:8761/eureka/
-            - name: BOOTSTRAP_SERVERS
-              value: kafka:9092
+          envFrom:
+            - configMapRef:
+                name: order-service-config
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -126,19 +120,20 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kafka
+  name: kafka-service
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: kafka
+      app: kafka-service
   template:
     metadata:
       labels:
-        app: kafka
+        app: kafka-service
     spec:
+      enableServiceLinks: false
       containers:
-        - name: kafka
+        - name: kafka-service
           image: confluentinc/cp-kafka:7.4.0
           ports:
             - containerPort: 9092
@@ -148,7 +143,7 @@ spec:
             - name: KAFKA_ZOOKEEPER_CONNECT
               value: zookeeper:2181
             - name: KAFKA_ADVERTISED_LISTENERS
-              value: PLAINTEXT://kafka:9092
+              value: PLAINTEXT://kafka-service:9092
             - name: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR
               value: '1'
             - name: KAFKA_AUTO_CREATE_TOPICS_ENABLE

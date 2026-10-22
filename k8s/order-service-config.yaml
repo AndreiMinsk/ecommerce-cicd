@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: order-service-config
+data:
+  DB_URL: "jdbc:postgresql://order-db:5432/postgres"
+  EUREKA_URL: "http://eureka-server:8761/eureka/"
+  BOOTSTRAP_SERVERS: "kafka-service:9092"
+

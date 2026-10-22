@@ -57,10 +57,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: kafka
+  name: kafka-service
 spec:
   selector:
-    app: kafka
+    app: kafka-service
   ports:
     - port: 9092
       targetPort: 9092
