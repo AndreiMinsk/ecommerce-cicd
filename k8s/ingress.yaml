@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: api.shopping.local
+      http:
+        paths:
+          - path: /products
+            backend:
+              service:
+                name: product-service
+                port:
+                  number: 8080
+            pathType: Prefix
+          - path: /orders
+            backend:
+              service:
+                name: order-service
+                port:
+                  number: 8081
+            pathType: Prefix
