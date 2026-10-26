@@ -1,11 +1,13 @@
 productService:
   image: andreimensk/product-service
+  pullPolicy: Always
   replicas: 1
   dbUrl: "jdbc:postgresql://ecommerce-product-db:5432/postgres"
   EUREKA_URL: "http://eureka-server:8761/eureka/"
   tag: latest
 orderService:
   image: andreimensk/order-service
+  pullPolicy: Always
   replicas: 1
   DB_URL: "jdbc:postgresql://ecommerce-order-db:5432/postgres"
   EUREKA_URL: "http://eureka-server:8761/eureka/"

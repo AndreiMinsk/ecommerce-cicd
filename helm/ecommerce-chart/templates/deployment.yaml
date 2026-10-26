@@ -39,6 +39,7 @@ spec:
       containers:
         - name: product-service
           image: {{ .Values.productService.image }}:{{ .Values.productService.tag | default .Chart.AppVersion}}
+          imagePullPolicy: {{ .Values.productService.pullPolicy }}
           resources:
             requests:
               cpu: "250m"
@@ -87,6 +88,7 @@ spec:
     spec:
       containers:
         - name: order-service
+          imagePullPolicy: {{ .Values.orderService.pullPolicy }}
           image: {{ .Values.orderService.image}}:{{ .Values.orderService.tag | default .Chart.AppVersion }}
           resources:
             requests:
