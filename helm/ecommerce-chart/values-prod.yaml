@@ -1,0 +1,24 @@
+productService:
+  image: andreimensk/product-service
+  replicas: 1
+  dbUrl: jdbc:postgresql://product-db:5432/postgres
+  EUREKA_URL: "http://eureka-server:8761/eureka/"
+orderService:
+  image: andreimensk/order-service
+  replicas: 1
+  DB_URL: jdbc:postgresql://order-db:5432/postgres
+  EUREKA_URL: "http://eureka-server:8761/eureka/"
+product-db:
+  image:
+    repository: bitnamilegacy/postgresql
+  auth:
+    existingSecret: product-db-secret
+    secretKeys:
+      adminPasswordKey: POSTGRES_PASSWORD
+order-db:
+  image:
+    repository: bitnamilegacy/postgresql
+  auth:
+    existingSecret: order-db-secret
+    secretKeys:
+      adminPasswordKey: POSTGRES_PASSWORD

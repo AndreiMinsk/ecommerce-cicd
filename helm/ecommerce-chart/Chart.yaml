@@ -1,0 +1,15 @@
+apiVersion: v2
+name: ecommerce-chart
+version: 0.1.0
+appVersion: 1.0.0
+description: "Ecommerce app: product, order, eureka, kafka"
+type: application
+dependencies:
+  - name: postgresql
+    alias: product-db
+    version: "~13.0.0"
+    repository: "https://charts.bitnami.com/bitnami"
+  - name: postgresql
+    alias: order-db
+    version: "~13.0.0"
+    repository: "https://charts.bitnami.com/bitnami"

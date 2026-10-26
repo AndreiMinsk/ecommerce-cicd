@@ -21,3 +21,6 @@ management:
     health:
       probes:
         enabled: true
+logging:
+  file:
+    path: /app/logs

@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: product-service-config
+data:
+  DB_URL: {{ .Values.productService.dbUrl }}
+  EUREKA_URL: {{ .Values.productService.EUREKA_URL }}
