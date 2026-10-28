@@ -5,7 +5,11 @@ import app.dto.ProductDto;
 import app.feign.ProductClient;
 import app.model.Order;
 import app.repository.OrderRepository;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import jdk.jfr.Category;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -13,6 +17,7 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.core.KafkaTemplate;
 
 import java.math.BigDecimal;
@@ -23,7 +28,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 public class OrderServiceTest {
 
-    @InjectMocks
     private OrderService orderService;
 
     @Mock
@@ -35,8 +39,15 @@ public class OrderServiceTest {
     @Mock
     private KafkaTemplate<String, Object> kafkaTemplate;
 
+    private MeterRegistry registry = new SimpleMeterRegistry();
+
     @Captor
     private ArgumentCaptor<Order> orderArgumentCaptor;
+
+    @BeforeEach
+    public void setUp() {
+        orderService = new OrderService(productClient, orderRepository, kafkaTemplate, registry);
+    }
 
     @Test
     public void createOrder_happyPath() {
