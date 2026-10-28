@@ -3,3 +3,5 @@ scrape_configs:
     metrics_path: '/actuator/prometheus'
     static_configs:
       - targets: ['product-service:8080', 'order-service:8081']
+rule_files:
+  - '/etc/prometheus/alerts.yml'
