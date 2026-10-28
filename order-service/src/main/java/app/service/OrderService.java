@@ -6,28 +6,55 @@ import app.feign.ProductClient;
 import app.model.Order;
 import app.model.Status;
 import app.repository.OrderRepository;
-import lombok.AllArgsConstructor;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
 public class OrderService {
 
     private final ProductClient productClient;
     private final OrderRepository orderRepository;
     private final KafkaTemplate<String, Object> kafkaTemplate;
+    private final MeterRegistry  meterRegistry;
+
+    private final Counter ordersCreated;
+    private final Counter ordersFailed;
+
+    public OrderService(ProductClient productClient, OrderRepository orderRepository, KafkaTemplate<String, Object> kafkaTemplate, MeterRegistry meterRegistry) {
+
+        this.productClient = productClient;
+        this.orderRepository = orderRepository;
+        this.kafkaTemplate = kafkaTemplate;
+        this.meterRegistry = meterRegistry;
+
+        this.ordersCreated = Counter.builder("business.orders.created")
+                .description("Total orders created")
+                .register(meterRegistry);
+        this.ordersFailed = Counter.builder("business.orders.failed")
+                .description("Total orders failed")
+                .register(meterRegistry);
+
+
+    }
+
+
     public void createOrder(OrderDto dto) {
-        checkAvailability(dto);
-        Order order = Order.builder()
-                .productId(dto.productId())
-                .quantity(dto.quantity())
-                .status(Status.CREATED)
-                .build();
-        orderRepository.save(order);
-        kafkaTemplate.send("order-events", order);
-
-
+        try {
+            checkAvailability(dto);
+            Order order = Order.builder()
+                    .productId(dto.productId())
+                    .quantity(dto.quantity())
+                    .status(Status.CREATED)
+                    .build();
+            orderRepository.save(order);
+            kafkaTemplate.send("order-events", order);
+            ordersCreated.increment();
+        } catch (Exception e) {
+            ordersFailed.increment();
+            throw e;
+        }
     }
 
     private void checkAvailability(OrderDto dto) {
