@@ -3,11 +3,13 @@ package app.service;
 import app.dto.OrderDto;
 import app.dto.ProductDto;
 import app.feign.ProductClient;
+import app.mapper.OrderMapper;
 import app.model.Order;
 import app.model.Status;
 import app.repository.OrderRepository;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
+import org.mapstruct.Mapper;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +23,9 @@ public class OrderService {
 
     private final Counter ordersCreated;
     private final Counter ordersFailed;
+    private final OrderMapper orderMapper;
 
-    public OrderService(ProductClient productClient, OrderRepository orderRepository, KafkaTemplate<String, Object> kafkaTemplate, MeterRegistry meterRegistry) {
+    public OrderService(ProductClient productClient, OrderRepository orderRepository, KafkaTemplate<String, Object> kafkaTemplate, MeterRegistry meterRegistry, OrderMapper orderMapper) {
 
         this.productClient = productClient;
         this.orderRepository = orderRepository;
@@ -36,7 +39,7 @@ public class OrderService {
                 .description("Total orders failed")
                 .register(meterRegistry);
 
-
+        this.orderMapper = orderMapper;
     }
 
 
@@ -49,7 +52,7 @@ public class OrderService {
                     .status(Status.CREATED)
                     .build();
             orderRepository.save(order);
-            kafkaTemplate.send("order-events", order);
+            kafkaTemplate.send("order-events", orderMapper.toEvent(order));
             ordersCreated.increment();
         } catch (Exception e) {
             ordersFailed.increment();

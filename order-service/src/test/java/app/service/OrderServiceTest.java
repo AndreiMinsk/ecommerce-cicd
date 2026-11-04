@@ -1,8 +1,10 @@
 package app.service;
 
 import app.dto.OrderDto;
+import app.dto.OrderEvent;
 import app.dto.ProductDto;
 import app.feign.ProductClient;
+import app.mapper.OrderMapper;
 import app.model.Order;
 import app.repository.OrderRepository;
 import io.micrometer.core.instrument.MeterRegistry;
@@ -12,10 +14,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -41,26 +40,31 @@ public class OrderServiceTest {
 
     private MeterRegistry registry = new SimpleMeterRegistry();
 
+    @Mock
+    private OrderMapper mapper;
+
     @Captor
     private ArgumentCaptor<Order> orderArgumentCaptor;
 
     @BeforeEach
     public void setUp() {
-        orderService = new OrderService(productClient, orderRepository, kafkaTemplate, registry);
+        orderService = new OrderService(productClient, orderRepository, kafkaTemplate, registry, mapper);
     }
 
     @Test
     public void createOrder_happyPath() {
 
         OrderDto orderDto = new OrderDto(1L, 1);
+        OrderEvent event = Mockito.mock(OrderEvent.class);
         ProductDto productDto = new ProductDto(1L, "test", new BigDecimal("250"), 20);
         when(productClient.getProduct(1L)).thenReturn(productDto);
+        when(mapper.toEvent(any(Order.class))).thenReturn(event);
 
 
         orderService.createOrder(orderDto);
 
         verify(orderRepository).save(any(Order.class)   );
-        verify(kafkaTemplate).send(any(String.class), any(Order.class));
+        verify(kafkaTemplate).send(any(String.class), any(OrderEvent.class));
 
     }
 
