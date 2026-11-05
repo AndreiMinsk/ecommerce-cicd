@@ -122,14 +122,11 @@
             <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
-            <!-- Конфигурация автоматически подтянется из parent POM -->
         </plugin>
 
-        <!-- 2. АКТИВАЦИЯ SPRING BOOT (Превратит тонкий JAR в жирный) -->
         <plugin>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-maven-plugin</artifactId>
-            <!-- Настройки переупаковки уже унаследуются из parent POM -->
         </plugin>
         </plugins>
     </build>
