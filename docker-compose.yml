@@ -21,7 +21,10 @@ services:
     ports:
       - "8082:8082"
     environment:
-      - GMAIL_APP_PASSWORD=${GMAIL_APP_PASSWORD}
+      - MAIL_PASSWORD=${MAIL_PASSWORD}
+      - MAIL_USERNAME=${MAIL_USERNAME}
+      - MAIL_HOST=${MAIL_HOST}
+      - MAIL_PORT=${MAIL_PORT}
       - LOG_FILE=/app/logs/log.txt
     depends_on:
       - eureka
