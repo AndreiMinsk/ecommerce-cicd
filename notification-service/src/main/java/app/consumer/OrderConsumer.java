@@ -34,8 +34,14 @@ public class OrderConsumer {
         if (cache.getIfPresent(dto.orderId()) != null) {
             return;
         }
-        emailService.sendEmail("danishprince@mail.ru", "order", dto.toString());
-        cache.put(dto.orderId(), true);
-        created.increment();
+        try {
+            emailService.sendEmail("danishprince@mail.ru", "order", dto.toString());
+            cache.put(dto.orderId(), true);
+            created.increment();
+        } catch (Exception e) {
+            failed.increment();
+            throw e;
+        }
+
     }
 }

@@ -23,7 +23,6 @@ public class EmailService {
         this.javaMailSender = javaMailSender;
     }
 
-    @Async
     public void sendEmail(String to, String subject, String text ) {
 
         SimpleMailMessage message = new SimpleMailMessage();
