@@ -7,11 +7,12 @@ spring:
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
         spring.json.trusted.packages: "app.dto"
+        default-requeue-rejected: false
   mail:
-    host: smtp.gmail.com
-    port: 587
-    username: hinatalondon@gmail.com
-    password: ${GMAIL_APP_PASSWORD}
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
     properties:
       mail:
         smtp:
