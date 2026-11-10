@@ -19,6 +19,8 @@ spring:
           auth: true
           starttls:
             enable: true
+  application:
+    name: notification-service
 logfile: ${LOG_FILE}
 server:
   port: 8082

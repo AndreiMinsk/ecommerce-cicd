@@ -1,0 +1,28 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: product
+          uri: lb://product-service
+          predicates:
+            - Path=/products/**
+        - id: order
+          uri: lb://order-service
+          predicates:
+            - Path=/orders/**
+  application:
+    name: gateway-service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8180/realms/ecommerce
+          jwk-set-uri: http://keycloak:8080/realms/ecommerce/protocol/openid-connect/certs
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://eureka:8761/eureka/}
+
+
