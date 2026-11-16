@@ -1,7 +1,7 @@
 services:
   product-service:
     build:
-      context: /product-service
+      context: ./product-service
     ports:
       - "8080:8080"
     depends_on:
@@ -9,7 +9,7 @@ services:
       - eureka
   order-service:
     build:
-      context: /order-service
+      context: ./order-service
     ports:
       - "8081:8081"
     depends_on:
@@ -46,7 +46,7 @@ services:
       - order_data:/var/lib/postgresql
   eureka:
     build:
-      context: /eureka-server
+      context: ./eureka-server
     ports:
       - "8761:8761"
   zookeeper:
